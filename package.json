@@ -2,7 +2,7 @@
   "name": "zeskjs",
   "repository": "zesk/zeskjs",
   "description": "Zesk JavaScript Library for integration with Zesk Web Application Framework.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "zesk",
     "zeskjs",
