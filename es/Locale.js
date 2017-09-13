@@ -1,14 +1,15 @@
+'use strict';
+
 /**
 * Copyright &copy; 2017 Market Acumen, Inc.
 */
 const Zesk = require("./Zesk");
 
-var 
-Locale = {},
-is_object = Zesk.is_object,
-to_string = Zesk.to_string,
-avalue = Zesk.avalue,
-plural_en = function (s, count) {
+var Locale = {},
+    is_object = Zesk.is_object,
+    to_string = Zesk.to_string,
+    avalue = Zesk.avalue,
+    plural_en = function (s, count) {
 	count = parseInt(count, 10);
 	if (count === 1) {
 		return s;
@@ -54,9 +55,8 @@ Locale = {
 		return n + Locale.ordinal_suffix(n);
 	},
 	ordinal_suffix: function (n) {
-		var
-		m10 = n % 10,
-		m100 = n % 100;
+		var m10 = n % 10,
+		    m100 = n % 100;
 		if (m100 > 10 && m100 < 20) {
 			return "th";
 		}
@@ -68,39 +68,38 @@ Locale = {
 		if (!tt[locale]) {
 			tt[locale] = {};
 		}
-		for ( var k in map) {
+		for (var k in map) {
 			if (map.hasOwnProperty(k)) {
 				tt[locale][k] = map[k].toString();
 			}
 		}
 		Zesk.set('translation-table', tt);
 	},
-	translate: function(string, locale) {
-		var
-		text = string.toString(),
-		phrase = string.right(':=', string),
-		tt = Zesk.get('translation-table'),
-		r,
-		_default = arguments.length > 2 ? arguments[2] : phrase;
+	translate: function (string, locale) {
+		var text = string.toString(),
+		    phrase = string.right(':=', string),
+		    tt = Zesk.get('translation-table'),
+		    r,
+		    _default = arguments.length > 2 ? arguments[2] : phrase;
 
 		locale = locale || Locale.locale();
-		tt = [ avalue(tt, locale, {}), avalue(tt, Locale.language(locale), {}) ];
-		r = Zesk.each(tt, function(i, t) {
-		//	console.log('tried ', text, i, t, t[text]);
+		tt = [avalue(tt, locale, {}), avalue(tt, Locale.language(locale), {})];
+		r = Zesk.each(tt, function (i, t) {
+			//	console.log('tried ', text, i, t, t[text]);
 			return t[text] || null;
 		});
 		if (r) {
 			return r;
 		}
-		r = Zesk.each(tt, function(i, t) {
-		//	console.log('tried ', phrase, i, t, t[phrase]);
+		r = Zesk.each(tt, function (i, t) {
+			//	console.log('tried ', phrase, i, t, t[phrase]);
 			return t[phrase] || null;
 		});
 		if (r) {
 			return r;
 		}
-		r = Zesk.each(tt, function(i, t) {
-		//	console.log('tried ', phrase.toLowerCase(), i, t, t[phrase.toLowerCase()]);
+		r = Zesk.each(tt, function (i, t) {
+			//	console.log('tried ', phrase.toLowerCase(), i, t, t[phrase.toLowerCase()]);
 			return t[phrase.toLowerCase()] || null;
 		});
 		if (r) {
@@ -125,11 +124,11 @@ Locale = {
 	}
 };
 Locale.translation('en', {
-	'plural:=day' : 'days',
-	'plural:=staff' : 'staff',
-	'plural:=sheep' : 'sheep',
-	'plural:=octopus' : 'octopi',
-	'plural:=news' : 'news'
+	'plural:=day': 'days',
+	'plural:=staff': 'staff',
+	'plural:=sheep': 'sheep',
+	'plural:=octopus': 'octopi',
+	'plural:=news': 'news'
 });
 Locale.__ = function (phrase, map) {
 	if (phrase instanceof Object) {

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Copyright &copy; 2017 Market Acumen, Inc.
  */
@@ -10,5 +12,5 @@ module.exports = {
 	ZeskException: require('./ZeskException'),
 	ZeskHandleJSON: require('./ZeskHandleJSON'),
 	ZeskObject: require('./ZeskObject'),
-	MemberTypes: require('./class/MemberTypes'),
+	MemberTypes: require('./MemberTypes')
 };
