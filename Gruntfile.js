@@ -5,21 +5,19 @@ module.exports = function (grunt) {
             options: {
                transform: [
                   ["babelify", {
-                     loose: "all"
                   }]
                ]
             },
             files: {
-               // if the source file has an extension of es6 then
-               // we change the name of the source file accordingly.
-               // The result file's extension is always .js
-               "./lib/index.js": ["./src/index.js"]
+               "./lib/index.js": [
+                  "./es/*.js",
+               ]
             }
          }
       },
       watch: {
          scripts: {
-            files: ["./modules/*.js"],
+            files: ["./es/*.js"],
             tasks: ["browserify"]
          }
       }

@@ -16,4 +16,4 @@ class ZeskException {
 	}
 }
 
-export default ZeskException;
+module.exports = ZeskException;

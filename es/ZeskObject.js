@@ -3,11 +3,17 @@
  *
  * Copyright (C) 2017 Market Acumen, Inc. All rights reserved
  */
-import _ from "lodash";
-import ZeskException from "./ZeskException";
+// import _ from "lodash";
+// import ZeskException from "./ZeskException";
 
-import $ from "jquery";
-import qs from "qs";
+// import $ from "jquery";
+// import qs from "qs";
+
+let _ = require("lodash");
+let ZeskException = require("./ZeskException");
+
+let $ = require("jquery");
+let qs = require("qs");
 
 var RSVP = require("rsvp-that-works");
 var format = require("string-format-obj");
@@ -213,4 +219,4 @@ ZeskObject.fetchById = function(Constructor, mixed) {
     return result.fetch();
 };
 
-export default ZeskObject;
+module.exports = ZeskObject;
