@@ -11,6 +11,7 @@
     "framework",
     "tools"
   ],
+  "main": "lib/index.js",
   "private": false,
   "dependencies": {
   }
