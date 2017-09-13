@@ -12,6 +12,14 @@
     "tools"
   ],
   "main": "lib/index.js",
+  "jsnext:main": "es/index.js",
+  "module": "es/index.js",
+  "files": [
+    "LICENSE.md",
+    "README.md",
+    "lib",
+    "es"
+  ],
   "private": false,
   "dependencies": {
     "jquery": "^3.2.1",
