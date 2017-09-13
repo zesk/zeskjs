@@ -1,2 +1,4 @@
-# zeskjs
-Modular Zesk JavaScript module suitable for direct hosting, NPM, Yarn, or Webify applications
+# Zesk JavaScript Library
+
+Copyright &copy; 2017 Market Acumen, Inc.
+
