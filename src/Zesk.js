@@ -3,14 +3,14 @@
  *
  * Copyright (C) 2017 Market Acumen, Inc. All rights reserved
  */
-let $ = require('jquery');
+var $ = require('jquery');
 let HTML = require('./HTML');
 
 var Zesk = {};
 var hooks = {};
-var W = window;
-var d = W.document;
-var L = W.location;
+var W = global.window || {};
+var d = W.document || {};
+var L = W.location || {};
 
 function gettype(x) {
 	if (x === null) {
@@ -142,17 +142,17 @@ function hook_path(hook) {
 	return hook;
 }
 
-$.extend(Zesk, {
+Object.assign(Zesk, {
     d: d,
     settings: {}, // Place module data here!
     hooks: hooks, // Module hooks go here - use add_hook and hook to use
-    w: window,
+    w: W,
     url_parts: {
         path: L.pathname,
         host: L.host,
         query: L.search,
         scheme: L.protocol,
-        url: document.URL,
+        url: d.URL,
         uri: L.pathname + L.search
     },
     page_scripts: null,
@@ -438,7 +438,7 @@ Zesk.clone = function(object) {
 	return clone;
 };
 
-$.extend(Array.prototype, {
+Object.assign(Array.prototype, {
     contains: function(x) {
 	    for (var i = 0; i < this.length; i++) {
 		    if (this[i] === x) {
@@ -468,7 +468,7 @@ $.extend(Array.prototype, {
     }
 });
 
-$.extend(Object, {
+Object.assign(Object, {
     fromCamelCase: function(from) {
 	    var to = {};
 	    for ( var i in from) {
@@ -489,7 +489,7 @@ $.extend(Object, {
     }
 });
 
-$.extend(String.prototype, {
+Object.assign(String.prototype, {
     compare: function(a) {
 	    return (this < a) ? -1 : (this === a) ? 0 : 1;
     },
@@ -637,7 +637,7 @@ $.extend(String.prototype, {
 	    return def || this;
     }
 });
-$.extend(String.prototype, {
+Object.assign(String.prototype, {
 	ends: String.prototype.ends_with
 });
 
@@ -703,7 +703,7 @@ Zesk.empty = function(v) {
 
 Zesk.ZObject = function(options) {
 	options = options || {};
-	this.options = Zesk.change_key_case($.extend({}, options));
+	this.options = Zesk.change_key_case(Object.assign({}, options));
 	// this.constructor.super.call(this);
 };
 Zesk.inherit(Zesk.ZObject, null, {
@@ -737,8 +737,8 @@ Zesk.ajax_form = function() {
 /*
  * Compatibility
  */
-if (!W.Object.keys) {
-	W.Object.keys = function(obj) {
+if (!Object.prototype.keys) {
+	Object.prototype.keys = function(obj) {
 		var keys = [], k;
 		for (k in obj) {
 			if (Object.prototype.hasOwnProperty.call(obj, k)) {

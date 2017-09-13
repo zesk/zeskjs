@@ -58,7 +58,6 @@
     "babel-plugin-transform-es2015-unicode-regex": "^6.5.0",
     "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
     "babel-plugin-transform-es3-property-literals": "^6.5.0",
-    "babel-preset-es2015-node6": "^0.4.0",
     "chai": "^3.2.0",
     "cross-env": "^1.0.7",
     "eslint": "^1.10.2",
@@ -74,11 +73,11 @@
   "scripts": {
     "clean": "rimraf lib dist es",
     "build": "npm run build:commonjs && npm run build:es",
-    "prepublish": "npm run clean && npm run test && npm run build",
+    "prepublish": "npm run clean && npm run build",
     "posttest": "npm run lint",
     "lint": "eslint src test",
     "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-core/register --reporter spec test/*.js",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel --presets es2015-node6 src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel --presets es2015-node6 src --out-dir es"
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es"
   }
 }
