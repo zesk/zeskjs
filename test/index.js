@@ -1,10 +1,10 @@
-var zesk = require('../es');
+var zesk = require('../src/index');
 
 let assert = require('assert');
 let should = require('should')
 
 describe('zesk', () => {
-  it('should be an object', () => {
-	  zesk.should.be.an.object(zesk);
+  it('should contain a member ZeskObject', () => {
+	  should(zesk).have.property('ZeskObject');
   });
 });
