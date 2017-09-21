@@ -7,7 +7,7 @@
   "author": "Kent Davidson <kent@marketacumen.com>",
   "homepage": "https://github.com/zesk/zeskjs",
   "description": "Zesk JavaScript Library for integration with Zesk Web Application Framework.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "keywords": [
     "zesk",
     "zeskjs",
@@ -22,6 +22,7 @@
   "files": [
     "LICENSE.md",
     "README.md",
+    "src",
     "lib",
     "es"
   ],
@@ -33,6 +34,7 @@
     "string-format-obj": "^1.1.0"
   },
   "license": "MIT",
+  "peerDependencies": {},
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-core": "^6.6.5",
@@ -64,7 +66,6 @@
     "eslint-config-airbnb": "1.0.2",
     "eslint-plugin-react": "^4.1.0",
     "mocha": "^2.2.5",
-    "redux": "^3.4.0",
     "rimraf": "^2.5.2",
     "typescript": "^1.8.10",
     "typescript-definition-tester": "0.0.4",
