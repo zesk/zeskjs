@@ -737,17 +737,17 @@ Zesk.ajax_form = function() {
 /*
  * Compatibility
  */
-if (!Object.prototype.keys) {
-	Object.prototype.keys = function(obj) {
-		var keys = [], k;
-		for (k in obj) {
-			if (Object.prototype.hasOwnProperty.call(obj, k)) {
-				keys.push(k);
-			}
-		}
-		return keys;
-	};
-}
+// if (!Object.prototype.keys) {
+// 	Object.prototype.keys = function(obj) {
+// 		var keys = [], k;
+// 		for (k in obj) {
+// 			if (Object.prototype.hasOwnProperty.call(obj, k)) {
+// 				keys.push(k);
+// 			}
+// 		}
+// 		return keys;
+// 	};
+// }
 
 $.fn.equalheight = function(selector) {
 	$(this).each(function() {

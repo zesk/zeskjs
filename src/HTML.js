@@ -112,13 +112,13 @@ var HTML = {
     }
 };
 
-Zesk.tag = function(name) {
-	var a = arguments;
-	if (a.length > 2) {
-		return HTML.tag(name, a[1], a[2]);
-	} else {
-		return HTML.tag(name, a[1]);
-	}
-};
+// Zesk.tag = function(name) {
+// 	var a = arguments;
+// 	if (a.length > 2) {
+// 		return HTML.tag(name, a[1], a[2]);
+// 	} else {
+// 		return HTML.tag(name, a[1]);
+// 	}
+// };
 
 module.exports = HTML;

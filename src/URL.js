@@ -77,4 +77,4 @@ $.extend(URL.prototype, {
 		return this.url;
 	}
 });
-modules.exports = URL;
+module.exports = URL;

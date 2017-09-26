@@ -3,8 +3,8 @@
  */
 module.exports = {
 	HTML: require('./HTML'),
-	Locale: Locale,
-	URL: URL,
+	Locale: require('./Locale'),
+	URL: require('./URL'),
 	Widgets: require('./Widgets'),
 	Zesk: require('./Zesk'),
 	ZeskException: require('./ZeskException'),
