@@ -11,10 +11,7 @@ var RSVP = require("rsvp-that-works");
 var format = require("string-format-obj");
 
 var ZeskObject = function(mixed, options) {
-<<<<<<< HEAD
     this._options = _.isObject(options) ? _.cloneDeep(options) : {};
-=======
->>>>>>> 3e32378ac6c0c971fbe922f073b5fa5649058ae6
     this._class = $.extend(
         {
             id_column: null,
@@ -44,8 +41,6 @@ Object.assign(ZeskObject.prototype, {
         });
         return result;
     },
-<<<<<<< HEAD
-=======
     /**
      * Called after object is created with "new" 
      */
@@ -58,7 +53,6 @@ Object.assign(ZeskObject.prototype, {
     /**
      * Return the class definition
      */
->>>>>>> 3e32378ac6c0c971fbe922f073b5fa5649058ae6
     class_definition: function() {
         return {};
     },
@@ -214,10 +208,6 @@ Object.assign(ZeskObject.prototype, {
 
     _fetch_reject: function(xhr, message) {},
     _store_resolve: function(data) {},
-<<<<<<< HEAD
-=======
-
->>>>>>> 3e32378ac6c0c971fbe922f073b5fa5649058ae6
     _store_reject: function(xhr, message) {},
 });
 
