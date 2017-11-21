@@ -11,7 +11,10 @@ var RSVP = require("rsvp-that-works");
 var format = require("string-format-obj");
 
 var ZeskObject = function(mixed, options) {
+<<<<<<< HEAD
     this._options = _.isObject(options) ? _.cloneDeep(options) : {};
+=======
+>>>>>>> 3e32378ac6c0c971fbe922f073b5fa5649058ae6
     this._class = $.extend(
         {
             id_column: null,
@@ -41,6 +44,21 @@ Object.assign(ZeskObject.prototype, {
         });
         return result;
     },
+<<<<<<< HEAD
+=======
+    /**
+     * Called after object is created with "new" 
+     */
+    initialize: function() {},
+    /**
+     * Called after item is fetched and initialized from remote source
+     */
+    fetched: function() {},
+
+    /**
+     * Return the class definition
+     */
+>>>>>>> 3e32378ac6c0c971fbe922f073b5fa5649058ae6
     class_definition: function() {
         return {};
     },
@@ -112,8 +130,9 @@ Object.assign(ZeskObject.prototype, {
         var promise = new RSVP.Promise();
         var url = this._format_url(this._endpoints.GET, options);
         this._ajax("GET", url, {
-            success: function(data) {
+            success: data => {
                 this._fetch_resolve(data);
+                this.fetched();
                 promise.resolve(this, data);
             },
             error: (xhr, message) => {
@@ -195,6 +214,10 @@ Object.assign(ZeskObject.prototype, {
 
     _fetch_reject: function(xhr, message) {},
     _store_resolve: function(data) {},
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3e32378ac6c0c971fbe922f073b5fa5649058ae6
     _store_reject: function(xhr, message) {},
 });
 
