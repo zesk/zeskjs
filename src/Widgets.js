@@ -1,6 +1,4 @@
-/*
- * $Id$
- *
- * Copyright (C) 2017 Market Acumen, Inc. All rights reserved
+/**
+ * Copyright &copy; 2017 Market Acumen, Inc.
  */
 module.exports = {};

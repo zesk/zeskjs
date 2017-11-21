@@ -1,14 +1,6 @@
-/*
- * $Id$
- *
- * Copyright (C) 2017 Market Acumen, Inc. All rights reserved
+/**
+ * Copyright &copy; 2017 Market Acumen, Inc.
  */
-// import _ from "lodash";
-// import ZeskException from "./ZeskException";
-
-// import $ from "jquery";
-// import qs from "qs";
-
 let _ = require("lodash");
 let ZeskException = require("./ZeskException");
 
@@ -18,7 +10,8 @@ let qs = require("qs");
 var RSVP = require("rsvp-that-works");
 var format = require("string-format-obj");
 
-var ZeskObject = function(mixed,options) {
+var ZeskObject = function(mixed, options) {
+    this._options = _.isObject(options) ? _.cloneDeep(options) : {};
     this._class = $.extend(
         {
             id_column: null,
@@ -26,10 +19,10 @@ var ZeskObject = function(mixed,options) {
             member_types: {},
             member_defaults: {},
         },
+        this._options.class || {},
         this._class || this.class_definition()
     );
     this._initialize_class();
-    this._options = _.isObject(options) ? _.cloneDeep(options) : {};
     this._need_load = false;
     $.extend(this, this._class.member_defaults);
     if (mixed) {
@@ -40,31 +33,31 @@ var ZeskObject = function(mixed,options) {
 };
 
 Object.assign(ZeskObject.prototype, {
-_members: function () {
-    let result = {};
-    let c = this._class;
-    _.forEach(this._class.member_types, (type, key) => {
-        result[key] = this[key] || c.member_defaults[key];
-    });
-    return result;
-},
-class_definition: function () {
+    _members: function() {
+        let result = {};
+        let c = this._class;
+        _.forEach(this._class.member_types, (type, key) => {
+            result[key] = this[key] || c.member_defaults[key];
+        });
+        return result;
+    },
+    class_definition: function() {
         return {};
     },
 
-id_column: function () {
-    return this._class.id_column || null;
-},
+    id_column: function() {
+        return this._class.id_column || null;
+    },
 
-_initialize_class: function () {
-    let c = this._class;
-    _.forEach(c.member_types, (type, name) => {
-        if (_.isUndefined(c.member_defaults[name])) {
-            c.member_defaults[name] = null;
-        }
-    });
-},
-   _init_instance: function (mixed) {
+    _initialize_class: function() {
+        let c = this._class;
+        _.forEach(c.member_types, (type, name) => {
+            if (_.isUndefined(c.member_defaults[name])) {
+                c.member_defaults[name] = null;
+            }
+        });
+    },
+    _init_instance: function(mixed) {
         if (_.isObject(mixed)) {
             let self = this;
             let c = this._class;
@@ -85,7 +78,7 @@ _initialize_class: function () {
         }
     },
 
-    super_initialize: function () {
+    super_initialize: function() {
         this._endpoints = $.extend(
             {
                 GET: null,
@@ -97,8 +90,9 @@ _initialize_class: function () {
         );
     },
 
-    is_new: function () {
-        var self = this, result = true;
+    is_new: function() {
+        var self = this,
+            result = true;
         $.each(this._class.primary_keys, function() {
             if (self[this]) {
                 result = false;
@@ -108,9 +102,9 @@ _initialize_class: function () {
         return result;
     },
 
-    fetch: function (options) {
+    fetch: function(options) {
         if (!_.isObject(options)) {
-           options = {};
+            options = {};
         }
         if (!this._endpoints.GET) {
             throw new ZeskException("{class} does not have GET endpoint", { class: this.constructor.name });
@@ -131,10 +125,10 @@ _initialize_class: function () {
         return promise;
     },
 
-    store: function () {
+    store: function() {
         var promise = new RSVP.Promise();
         this._ajax(this.is_new() ? "POST" : "PUT", this._format_url(this._endpoints.PUT), {
-            success: (data) => {
+            success: data => {
                 this._store_resolve(data);
                 promise.resolve(this, data);
             },
@@ -146,7 +140,7 @@ _initialize_class: function () {
         return promise;
     },
 
-    _format_url: function (url, options = {}) {
+    _format_url: function(url, options = {}) {
         var q = qs.stringify(options);
         var u = format(url, this);
         if (!q) {
@@ -155,10 +149,10 @@ _initialize_class: function () {
         return u + (q && u.indexOf("?") >= 0 ? "&" : "?") + q;
     },
 
-    _ajax: function (method, url, data) {
+    _ajax: function(method, url, data) {
         data = data || {};
         if (_.isObject(data.data)) {
-            data.data = JSON.stringify(data.data); 
+            data.data = JSON.stringify(data.data);
         }
         $.ajax(
             url,
@@ -177,10 +171,10 @@ _initialize_class: function () {
     /**
      * Run on each child object as fetched as a member of this object. Should convert to a JavaScript class.
      */
-    _resolve_object: function (data) {
+    _resolve_object: function(data) {
         return data;
     },
-    _fetch_resolve: function (data) {
+    _fetch_resolve: function(data) {
         var self = this;
         var c = this._class;
         $.each(data, function(member) {
@@ -199,14 +193,9 @@ _initialize_class: function () {
         console.log("Loaded " + this.constructor.name + " #" + this[this._class.id_column]);
     },
 
-    _fetch_reject: function (xhr, message) {
-
-    },
-    _store_resolve: function (data) {},
-
-    _store_reject: function (xhr, message) {
-
-    }
+    _fetch_reject: function(xhr, message) {},
+    _store_resolve: function(data) {},
+    _store_reject: function(xhr, message) {},
 });
 
 ZeskObject.mixedToId = function(mixed) {
