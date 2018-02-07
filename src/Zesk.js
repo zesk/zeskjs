@@ -2,7 +2,6 @@
  * Copyright &copy; 2017 Market Acumen, Inc.
  */
 var $ = require("jquery");
-let HTML = require("./HTML");
 
 var Zesk = {};
 var hooks = {};
@@ -97,6 +96,37 @@ Zesk.is_integer = is_integer;
 Zesk.is_function = is_function;
 Zesk.is_float = is_float;
 Zesk.is_url = is_url;
+
+function to_list(x, def, delim) {
+	def = def || [];
+	delim = delim || ".";
+	if (is_array(x)) {
+		return x;
+	}
+	if (x === null) {
+		return def;
+	}
+	return x.toString().split(delim);
+}
+
+function to_bool(x) {
+	var d = arguments.length > 1 ? arguments[1] : false;
+	if (is_bool(x)) {
+		return x;
+	}
+	if (is_numeric(x)) {
+		return x !== 0;
+	}
+	if (is_string(x)) {
+		if (["t", "true", "1", "enabled", "y", "yes"].contains(x)) {
+			return true;
+		}
+		if (["f", "false", "0", "disabled", "n", "no"].contains(x)) {
+			return false;
+		}
+	}
+	return d;
+}
 
 function object_path(object, path, def) {
 	var curr = object,
@@ -408,11 +438,9 @@ Object.assign(Zesk, {
 		return $('link[rel="stylesheet"][href="' + href + '"][media="' + media + '"').length > 0;
 	},
 	message: function(message, options) {
-		options = is_string(options)
-			? {
-					level: options,
-				}
-			: options;
+		if (is_string(options)) {
+			options = { level: options };
+		}
 		Zesk.hook("message", message, options);
 		Zesk.log(message, options);
 	},
@@ -685,18 +713,6 @@ Zesk.to_integer = function(x) {
 	return d;
 };
 
-function to_list(x, def, delim) {
-	def = def || [];
-	delim = delim || ".";
-	if (is_array(x)) {
-		return x;
-	}
-	if (x === null) {
-		return def;
-	}
-	return x.toString().split(delim);
-}
-
 Zesk.to_list = to_list;
 
 Zesk.to_float = function(x) {
@@ -712,24 +728,6 @@ Zesk.to_string = function(x) {
 	return x.toString();
 };
 
-function to_bool(x) {
-	var d = arguments.length > 1 ? arguments[1] : false;
-	if (is_bool(x)) {
-		return x;
-	}
-	if (is_numeric(x)) {
-		return x !== 0;
-	}
-	if (is_string(x)) {
-		if (["t", "true", "1", "enabled", "y", "yes"].contains(x)) {
-			return true;
-		}
-		if (["f", "false", "0", "disabled", "n", "no"].contains(x)) {
-			return false;
-		}
-	}
-	return d;
-}
 Zesk.to_bool = to_bool;
 
 Zesk.empty = function(v) {

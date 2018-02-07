@@ -4,6 +4,9 @@
 const $ = require("jquery");
 const Zesk = require("./Zesk");
 
+var is_object = Zesk.is_object;
+var d = global.window.document;
+
 var URL = function(mixed) {
 	"use strict";
 	var self = this;
@@ -16,9 +19,9 @@ var URL = function(mixed) {
 				self[this] = mixed[this];
 			}
 		});
-	} else if (zesk.is_url(mixed)) {
+	} else if (Zesk.is_url(mixed)) {
 		this.parse(mixed);
-	} else if (zesk.is_string(mixed)) {
+	} else if (Zesk.is_string(mixed)) {
 		this.path = mixed;
 	}
 };
@@ -28,11 +31,11 @@ $.extend(URL.prototype, {
 		if (mixed === undefined) {
 			return this.query || null;
 		}
-		if (zesk.is_string(mixed)) {
+		if (Zesk.is_string(mixed)) {
 			if (mixed.charAt(0) !== "?") {
 				mixed = "?" + mixed;
 			}
-		} else if (zesk.is_object(mixed)) {
+		} else if (Zesk.is_object(mixed)) {
 			var items = [];
 			$.each(mixed, function(k) {
 				if (this === null || this === undefined || this === "") {

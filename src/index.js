@@ -10,5 +10,5 @@ module.exports = {
 	ZeskException: require("./ZeskException"),
 	ZeskHandleJSON: require("./ZeskHandleJSON"),
 	ZeskObject: require("./ZeskObject"),
-	MemberTypes: require("./MemberTypes"),
+	MemberTypes: require("./MemberTypes").constants,
 };

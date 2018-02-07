@@ -6,6 +6,7 @@ let ZeskException = require("./ZeskException");
 
 let $ = require("jquery");
 let qs = require("qs");
+let serializers = require("./MemberTypes").serializers;
 
 var RSVP = require("rsvp-that-works");
 var format = require("string-format-obj");
@@ -17,6 +18,7 @@ var ZeskObject = function(mixed, options) {
             id_column: null,
             primary_keys: [],
             member_types: {},
+            null: {},
             member_defaults: {},
         },
         this._options.class || {},
@@ -140,17 +142,61 @@ Object.assign(ZeskObject.prototype, {
 
     store: function() {
         var promise = new RSVP.Promise();
-        this._ajax(this.is_new() ? "POST" : "PUT", this._format_url(this._endpoints.PUT), {
+        var method = this.is_new() ? "PUT" : "POST";
+        let url = this._format_url(this._endpoints[method]);
+        this._ajax(method, url, {
             success: data => {
                 this._store_resolve(data);
-                promise.resolve(this, data);
+                data.this = this;
+                promise.resolve(data);
             },
             error: (xhr, message) => {
                 this._store_reject(xhr, message);
                 promise.reject(new Error(message));
             },
+            data: this._storeData(),
         });
         return promise;
+    },
+
+    _objectToId: function(v) {
+        if (!_.isObject(v)) {
+            return null;
+        }
+        if (v._class && v._class.id_column) {
+            return v[v._class.id_column];
+        }
+        if (v.id) {
+            return v.id;
+        }
+        return null;
+    },
+
+    _convertType: function(value, type) {
+        if (value === null) {
+            return null;
+        }
+        if (type === "object") {
+            let newvalue = this._objectToId(value);
+            if (newvalue !== null) {
+                return newvalue;
+            }
+        }
+        if (serializers[type]) {
+            return serializers[type](value);
+        }
+        return String(value);
+    },
+    _storeData: function() {
+        let c = this._class;
+        let data = {};
+        _.forEach(c.member_types, (type, key) => {
+            let value = this._convertType(this[key], type);
+            if (value !== null || c.null[key]) {
+                data[key] = value;
+            }
+        });
+        return data;
     },
 
     _format_url: function(url, options = {}) {
@@ -206,9 +252,20 @@ Object.assign(ZeskObject.prototype, {
         console.log("Loaded " + this.constructor.name + " #" + this[this._class.id_column]);
     },
 
-    _fetch_reject: function(xhr, message) {},
-    _store_resolve: function(data) {},
-    _store_reject: function(xhr, message) {},
+    _fetch_reject: function(xhr, message) {
+        console.error("Fetch of object failed " + message);
+    },
+    _store_resolve: function(data) {
+        if (data.status) {
+            console.info("Store of object succeeded. Result: " + JSON.stringify(data));
+        } else {
+            console.error("Store of object failed in application (status). Data follows.");
+            console.error(data);
+        }
+    },
+    _store_reject: function(xhr, message) {
+        console.error("Store of object failed. Result: " + message);
+    },
 });
 
 ZeskObject.mixedToId = function(mixed) {
