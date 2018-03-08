@@ -29,7 +29,7 @@
     "qs": "^6.5.1",
     "rsvp-that-works": "^1.2.0",
     "string-format-obj": "^1.1.0",
-    "webpack": "^1.12.14"
+    "webpack": "*"
   },
   "license": "MIT",
   "peerDependencies": {},
