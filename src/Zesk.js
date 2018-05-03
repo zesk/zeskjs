@@ -349,20 +349,16 @@ Object.assign(Zesk, {
 	/**
 	 * Iterate over an object, calling a function once per element
 	 * 
-	 * @param object|array
-	 *            x
-	 * @param function
-	 *            fn
-	 * @param boolean
-	 *            term_false Set to true to terminate when function returns
-	 *            a false-ish value as opposed to a true-ish value
+	 * @param {object|array} x
+	 * @param {function} fn with signature (key, value, collection) "this" is set to the value as well
+	 * @param {boolean} term_fales Set to true to terminate when function returns a false-ish value as opposed to a true-ish value
 	 */
 	each: function(x, fn, term_false) {
 		var i, r;
 		term_false = to_bool(term_false);
 		if (is_array(x)) {
 			for (i = 0; i < x.length; i++) {
-				r = fn.call(x[i], i, x[i]);
+				r = fn.call(x[i], i, x[i], x);
 				if (term_false) {
 					if (!r) {
 						return r;
@@ -374,7 +370,7 @@ Object.assign(Zesk, {
 		} else if (is_object(x)) {
 			for (i in x) {
 				if (x.hasOwnProperty(i)) {
-					r = fn.call(x[i], i, x[i]);
+					r = fn.call(x[i], i, x[i], x);
 					if (term_false) {
 						if (!r) {
 							return r;

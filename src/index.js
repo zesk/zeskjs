@@ -11,4 +11,5 @@ module.exports = {
 	ZeskHandleJSON: require("./ZeskHandleJSON"),
 	ZeskObject: require("./ZeskObject"),
 	MemberTypes: require("./MemberTypes").constants,
+	DateTools: require("./DateTools"),
 };

@@ -7,7 +7,7 @@
   "author": "Kent Davidson <kent@marketacumen.com>",
   "homepage": "https://github.com/zesk/zeskjs",
   "description": "Zesk JavaScript Library for integration with Zesk Web Application Framework.",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "keywords": [
     "zesk",
     "zeskjs",
