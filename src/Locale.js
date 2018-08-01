@@ -1,8 +1,8 @@
 /**
  * Copyright &copy; 2017 Market Acumen, Inc.
  */
-const Zesk = require("./Zesk");
-const DateTools = require("./DateTools");
+import Zesk from "./Zesk";
+import DateTools from "./DateTools";
 
 let Locale = {},
 	is_object = Zesk.is_object,
