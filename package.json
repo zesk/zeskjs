@@ -8,9 +8,21 @@
   "homepage": "https://github.com/zesk/zeskjs",
   "description": "Zesk JavaScript Library for integration with Zesk Web Application Framework.",
   "version": "0.11.2",
-  "keywords": ["zesk", "zeskjs", "javascript", "application", "framework", "tools"],
+  "keywords": [
+    "zesk",
+    "zeskjs",
+    "javascript",
+    "application",
+    "framework",
+    "tools"
+  ],
   "main": "lib/index.js",
-  "files": ["LICENSE.md", "README.md", "src", "lib"],
+  "files": [
+    "LICENSE.md",
+    "README.md",
+    "src",
+    "lib"
+  ],
   "private": false,
   "dependencies": {
     "jquery": "^3.2.1",
@@ -35,7 +47,9 @@
     "rimraf": "^2.6.2"
   },
   "babel": {
-    "presets": ["latest"]
+    "presets": [
+      "latest"
+    ]
   },
   "scripts": {
     "clean": "rimraf lib dist es",
