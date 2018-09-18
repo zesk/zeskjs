@@ -2,7 +2,7 @@
 
 [![Dependencies][dependencies-image]][dependencies-url]
 
-Copyright &copy; 2017 Market Acumen, Inc.
+Copyright &copy; 2018 Market Acumen, Inc.
 
 This provides Zesk JavaScript utilities when using Zesk with web applications built with `browserify`, `npm` or `yarn`.
 
