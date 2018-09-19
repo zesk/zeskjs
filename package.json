@@ -25,26 +25,27 @@
   ],
   "private": false,
   "dependencies": {
-    "jquery": "^3.2.1",
+    "jquery": ">=3.2.1",
     "lodash": ">=4.17.5",
-    "qs": "^6.5.1",
-    "rsvp-that-works": "^1.2.0",
-    "string-format-obj": "^1.1.0",
+    "qs": "*",
+    "rsvp-that-works": "*",
+    "string-format-obj": "*",
     "webpack": "*"
   },
   "license": "MIT",
   "peerDependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-core": "^6.18.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-object-entries": "^1.0.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-latest": "^6.24.1",
-    "chai": "^3.5.0",
-    "debug": ">=2.6.9",
-    "mocha": "^3.2.0",
-    "rimraf": "^2.6.2"
+    "babel-cli": "*",
+    "babel-core": "*",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-plugin-transform-object-entries": "*",
+    "babel-preset-env": "*",
+    "babel-preset-latest": "*",
+    "chai": "^4.1.2",
+    "debug": "^4.0.1",
+    "growl": ">=1.10.0",
+    "mocha": "^5.2.0",
+    "rimraf": "*"
   },
   "babel": {
     "presets": [
