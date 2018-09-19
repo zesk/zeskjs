@@ -26,7 +26,7 @@
   "private": false,
   "dependencies": {
     "jquery": "^3.2.1",
-    "lodash": "*",
+    "lodash": ">=4.17.5",
     "qs": "^6.5.1",
     "rsvp-that-works": "^1.2.0",
     "string-format-obj": "^1.1.0",
