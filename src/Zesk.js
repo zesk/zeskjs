@@ -115,7 +115,7 @@ function to_bool(x) {
 		return x;
 	}
 	if (is_numeric(x)) {
-		return x !== 0;
+		return parseInt(x, 10) !== 0;
 	}
 	if (is_string(x)) {
 		if (["t", "true", "1", "enabled", "y", "yes"].contains(x)) {
@@ -211,10 +211,10 @@ Object.assign(Zesk, {
 		return def;
 	},
 	/**
-     * @param name string Name of cookie to set/get
-     * @param value string Value of cookie to set
-     * @param options object Extra options: ttl: integer (seconds), domain: string
-     */
+	 * @param name string Name of cookie to set/get
+	 * @param value string Value of cookie to set
+	 * @param options object Extra options: ttl: integer (seconds), domain: string
+	 */
 	cookie: function(name, value, options) {
 		var getcookie = function(n) {
 				var c = d.cookie;
@@ -348,10 +348,10 @@ Object.assign(Zesk, {
 	},
 	/**
 	 * Iterate over an object, calling a function once per element
-	 * 
+	 *
 	 * @param {object|array} x
 	 * @param {function} fn with signature (key, value, collection) "this" is set to the value as well
-	 * @param {boolean} term_fales Set to true to terminate when function returns a false-ish value as opposed to a true-ish value
+	 * @param {boolean} term_false Set to true to terminate when function returns a false-ish value as opposed to a true-ish value
 	 */
 	each: function(x, fn, term_false) {
 		var i, r;
@@ -381,7 +381,7 @@ Object.assign(Zesk, {
 				}
 			}
 		} else {
-			return fn.call(x, 0, x);
+			return fn.call(x, 0, x, x);
 		}
 	},
 	tpl: function(mixed, map) {
@@ -507,7 +507,7 @@ Object.assign(Array.prototype, {
 	},
 	/**
 	 * Join elements of an array by wrapping each one with a prefix/suffix
-	 * 
+	 *
 	 * @param string
 	 *            prefix
 	 * @param string

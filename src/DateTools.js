@@ -3,7 +3,6 @@
  */
 //const _ = require("lodash");
 const Zesk = require("./Zesk");
-const Locale = require("./Locale");
 
 function zero(x) {
 	if (x < 10) {
@@ -63,16 +62,29 @@ DateTools.units = {
 	[DateTools.MONTH]: SECONDS_IN_YEAR / MONTHS_IN_YEAR,
 	[DateTools.QUARTER]: SECONDS_IN_YEAR / QUARTERS_IN_YEAR,
 };
+DateTools.unitsOrder = [
+	DateTools.MILLISECOND,
+	DateTools.SECOND,
+	DateTools.MINUTE,
+	DateTools.HOUR,
+	DateTools.DAY,
+	DateTools.WEEK,
+	DateTools.YEAR,
+	DateTools.MONTH,
+	DateTools.QUARTER,
+];
 
 DateTools.findUnit = function(seconds) {
-	var last = DateTools.MILLISECONDS;
-	return Zesk.each(DateTools.units, (sec, unit) => {
+	let result = DateTools.YEAR;
+	const units = DateTools.units;
+	Zesk.each(DateTools.unitsOrder, function() {
+		let sec = units[this];
 		if (seconds < sec) {
-			return last;
+			return true;
 		}
-		last = sec;
-		return null;
+		result = this;
 	});
+	return result;
 };
 
 DateTools.toUnit = function(seconds, unit) {
