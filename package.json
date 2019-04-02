@@ -7,7 +7,7 @@
   "author": "Kent Davidson <kent@marketacumen.com>",
   "homepage": "https://github.com/zesk/zeskjs",
   "description": "Zesk JavaScript Library for integration with Zesk Web Application Framework.",
-  "version": "0.11.4",
+  "version": "0.11.5",
   "keywords": [
     "zesk",
     "zeskjs",
@@ -26,7 +26,7 @@
   "private": false,
   "dependencies": {
     "jquery": ">=3.2.1",
-    "lodash": ">=4.17.5",
+    "lodash": ">=4",
     "qs": ">=1",
     "rsvp-that-works": "*",
     "string-format-obj": "*",
