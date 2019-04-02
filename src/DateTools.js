@@ -33,9 +33,45 @@ var DateTools = {
 	HOUR: "hour",
 	DAY: "day",
 	WEEK: "week",
+	WEEKDAY: "weekday",
 	MONTH: "month",
 	QUARTER: "quarter",
 	YEAR: "year",
+
+	formatting: function(d, localizer) {
+		if (!localizer) {
+			localizer = function(x) {
+				return x;
+			};
+		}
+		let h12 = d.getUTCHours() % 12;
+		if (h12 === 0) {
+			h12 = 12;
+		}
+		return {
+			YYYY: d.getUTCFullYear(),
+			M: d.getUTCMonth() + 1,
+			MM: zero(d.getUTCMonth() + 1),
+			MMM: localizer(DateTools.short_months[d.getUTCMonth()]),
+			MMMM: localizer(DateTools.months[d.getUTCMonth()]),
+			W: d.getUTCDay(),
+			WWW: localizer(DateTools.short_weekdays[d.getUTCDay()]),
+			WWWW: localizer(DateTools.weekdays[d.getUTCDay()]),
+			D: d.getUTCDate(),
+			DD: zero(d.getUTCDate()),
+			h: d.getUTCHours(),
+			hh: zero(d.getUTCHours()),
+			"12h": h12,
+			"12hh": zero(h12),
+			m: d.getUTCMinutes(),
+			mm: zero(d.getUTCMinutes()),
+			s: d.getUTCSeconds(),
+			ss: zero(d.getUTCSeconds()),
+		};
+	},
+	format: function(d, format, localizer) {
+		return Zesk.map(format, DateTools.formatting(d, localizer));
+	},
 };
 
 const SECONDS_IN_MINUTE = 60;
@@ -69,10 +105,95 @@ DateTools.unitsOrder = [
 	DateTools.HOUR,
 	DateTools.DAY,
 	DateTools.WEEK,
-	DateTools.YEAR,
 	DateTools.MONTH,
-	DateTools.QUARTER,
+	DateTools.YEAR,
 ];
+
+const subtract = function(source, timestamp) {
+	return source.getTime() - timestamp.getTime();
+};
+
+const difference = function(source, timestamp, unit = DateTools.SECOND, precision = 0) {
+	if (timestamp.getTime() > source.getTime()) {
+		return -difference(timestamp, source, unit, precision);
+	}
+	if (unit === DateTools.WEEKDAY) {
+		return source.getUTCDay() - timestamp.getUTCDay();
+	}
+	let delta = subtract(source, timestamp);
+	delta *= 0.001;
+	switch (unit) {
+		case DateTools.MILLISECOND:
+			return delta * 1000;
+		case DateTools.SECOND:
+			return delta;
+		case DateTools.MINUTE:
+			return Math.round(delta / 60.0, precision);
+		case DateTools.HOUR:
+			return Math.round(delta / 3600.0, precision);
+		case DateTools.DAY:
+			return Math.round(delta / 86400, precision);
+		case DateTools.WEEK:
+			return Math.round(delta / (86400 * 7), precision);
+	}
+
+	let mstart = timestamp.getUTCMonth(),
+		ystart = timestamp.getUTCFullYear();
+
+	let mend = source.getUTCMonth(),
+		yend = source.getUTCFullYear();
+
+	if (precision === 0) {
+		switch (unit) {
+			case DateTools.MONTH:
+				return (yend - ystart) * 12 + (mend - mstart);
+			case DateTools.QUARTER:
+				mend = parseInt(mend / 4, 10);
+				mstart = parseInt(mstart / 4, 10);
+				return (yend - ystart) * 4 + (mend - mstart);
+			case DateTools.YEAR:
+				return yend - ystart;
+			default:
+				throw new Error("DateTools.difference(" + source + "," + timestamp + "," + unit + "): Bad unit");
+		}
+	} else {
+		// Works like so:
+		//
+		// 2/22 -> 3/22 = 1 month
+		// 2/12 -> 3/22 = 1 month + ((3/22-2/22) / 28)
+
+		let intmon = (yend - ystart) * 12 + (mend - mstart);
+		let total = DateTools.days_in_month(mstart, ystart);
+
+		let temp = new Date();
+		temp.setTime(timestamp.getTime());
+		temp.setMonth(mstart);
+		temp.setYear(ystart);
+
+		let result = null,
+			fract = subtract(temp, source);
+		fract = fract / parseFloat(total * 86400);
+
+		switch (unit) {
+			case DateTools.MONTH:
+				result = Math.round(intmon + fract, precision);
+
+				break;
+			case DateTools.QUARTER:
+				result = Math.round((intmon + fract) / 3, precision);
+
+				break;
+			case DateTools.YEAR:
+				result = Math.round((intmon + fract) / 12, precision);
+
+				break;
+			default:
+				throw new Error("DateTools.difference(" + source + "," + timestamp + "," + unit + "): Bad unit");
+		}
+		return result;
+	}
+};
+DateTools.difference = difference;
 
 DateTools.findUnit = function(seconds) {
 	let result = DateTools.YEAR;
@@ -93,5 +214,38 @@ DateTools.toUnit = function(seconds, unit) {
 	}
 	return parseFloat(seconds) / DateTools.units[unit];
 };
+
+const months = function() {
+	let m = [],
+		d = new Date();
+	m.length = MONTHS_IN_YEAR;
+	return m.fill(0).map(function(a, i) {
+		d.setUTCDate(1);
+		d.setUTCMonth(i);
+		return d.toDateString().split(" ")[1];
+	});
+};
+
+DateTools.months = DateTools.short_months = months();
+
+const weekdays = function() {
+	let m = [],
+		d = new Date(),
+		init;
+	d.setUTCFullYear(2019);
+	d.setUTCDate(19);
+	d.setUTCMonth(3); // Sunday
+	d.setUTCHours(0);
+
+	d.setUTCSeconds(0);
+
+	init = d.getTime();
+	m.length = DAYS_PER_WEEK;
+	return m.fill(0).map(function(a, i) {
+		d.setTime(init + 86400 * 1000 * i);
+		return d.toDateString().split(" ")[0];
+	});
+};
+DateTools.weekdays = DateTools.short_weekdays = weekdays();
 
 module.exports = DateTools;

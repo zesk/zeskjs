@@ -1,13 +1,14 @@
 /**
  * Copyright &copy; 2017 Market Acumen, Inc.
  */
-import _ from 'lodash';
+import _ from "lodash";
 
 import Zesk from "./Zesk";
 import DateTools from "./DateTools";
 
 let Locale = {},
 	is_object = Zesk.is_object,
+	is_string = Zesk.is_string,
 	to_string = Zesk.to_string,
 	avalue = Zesk.avalue,
 	plural_en = function(s, count) {
@@ -29,8 +30,46 @@ let Locale = {},
 				break;
 		}
 		return s + "s";
+	},
+	cardinal_default = function(object, number) {
+		let other = object.other || "-no-other-key-";
+		number = parseInt(number, 10);
+		if (number === 0) {
+			return object.zero || other;
+		}
+		if (number === 1) {
+			return object.one || other;
+		}
+		if (number === 2) {
+			return object.two || other;
+		}
+		if (number === 3) {
+			return object.few || other;
+		}
+		if (number >= 4 && number <= 6) {
+			return object.many || other;
+		}
+		return other;
 	};
 Locale = {
+	cardinal: function(mixed, number) {
+		if (is_string(mixed)) {
+			return cardinal_default({
+				one: Locale.__("cardinal::one:=" + mixed),
+				other: Locale.__("cardinal::other:=" + mixed),
+			});
+		}
+		if (is_object(mixed)) {
+			return cardinal_default(mixed, number);
+		}
+		throw new Error("Invalid mixed type passed in " + typeof mixed);
+	},
+	cardinal_phrase(mixed, number) {
+		return Locale.__("cardinal::phrase:={number} {cardinal}", {
+			number: number,
+			cardinal: Locale.cardinal(mixed, number),
+		});
+	},
 	plural: function plural(s, n, locale) {
 		n = n || 2;
 		if (Locale.language(locale) === "en") {
@@ -124,12 +163,22 @@ Locale = {
 		tables[locale] = tt;
 	},
 };
+// Old way
 Locale.translation("en", {
 	"plural:=day": "days",
 	"plural:=staff": "staff",
 	"plural:=sheep": "sheep",
 	"plural:=octopus": "octopi",
 	"plural:=news": "news",
+});
+// new way
+Locale.translation("en", {
+	"cardinal::other:=day": "days",
+	"cardinal::other:=staff": "staff",
+	"cardinal::other:=sheep": "sheep",
+	"cardinal::other:=octopus": "octopi",
+	"cardinal::other:=news": "news",
+	"cardinal::other:=person": "people",
 });
 Locale.__ = function(phrase, map) {
 	if (_.isUndefined(phrase)) {
@@ -156,15 +205,21 @@ Locale.durationString = function(delta, min_unit) {
 	if (Zesk.is_string(min_unit)) {
 		min_unit = DateTools.units[min_unit] || 0;
 	}
-	Zesk.each(DateTools.units, function(unit, nsecs) {
+	let units = DateTools.unitsOrder;
+	for (let i = units.length - 1; i >= 0; i--) {
+		let unit = units[i],
+			nsecs = DateTools.units[unit];
 		if (unit === min_unit || delta > nsecs * 2 - 1) {
 			number = parseInt(delta / nsecs, 10);
-			return Locale.plural_n(Locale.__(unit), number);
+			return {
+				duration: Locale.plural_n(Locale.__(unit), number),
+				number,
+			};
 		}
-	});
+	}
 	return {
 		duration: Locale.plural_n(Locale.__(DateTools.SECOND), parseInt(delta, 10)),
-		number: number,
+		number,
 	};
 };
 

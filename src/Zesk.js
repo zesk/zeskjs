@@ -83,8 +83,6 @@ Zesk.is_date = function(a) {
 
 Zesk.gettype = gettype;
 
-Zesk.each = Zesk.each;
-
 Zesk.is_array = is_array;
 Zesk.is_object = is_object;
 Zesk.is_array = is_array;
@@ -541,6 +539,28 @@ Object.assign(Object, {
 		return to;
 	},
 });
+Zesk.map = function(string, object, case_insensitive = false) {
+	var k,
+		suffix = "",
+		self;
+	case_insensitive = !!case_insensitive; // Convert to bool
+	if (!is_object(object)) {
+		return string;
+	}
+	self = string;
+	if (case_insensitive) {
+		object = Zesk.change_key_case(object);
+		suffix = "i";
+	}
+	for (k in object) {
+		if (object.hasOwnProperty(k)) {
+			var value = object[k],
+				replace = value === null ? "" : String(object[k]);
+			self = self.replace(new RegExp("\\{" + k + "\\}", "g" + suffix), replace);
+		}
+	}
+	return self;
+};
 
 Object.assign(String.prototype, {
 	compare: function(a) {
@@ -635,27 +655,8 @@ Object.assign(String.prototype, {
 		}
 		return self;
 	},
-	map: function(object, case_insensitive) {
-		var k,
-			suffix = "",
-			self;
-		case_insensitive = !!case_insensitive; // Convert to bool
-		if (!is_object(object)) {
-			return this;
-		}
-		self = this;
-		if (case_insensitive) {
-			object = Zesk.change_key_case(object);
-			suffix = "i";
-		}
-		for (k in object) {
-			if (object.hasOwnProperty(k)) {
-				var value = object[k],
-					replace = value === null ? "" : String(object[k]);
-				self = self.replace(new RegExp("\\{" + k + "\\}", "g" + suffix), replace);
-			}
-		}
-		return self;
+	map: function(object, case_insensitive = false) {
+		return Zesk.map(this, object, case_insensitive);
 	},
 	to_array: function() {
 		var i,
